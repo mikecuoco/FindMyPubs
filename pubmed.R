@@ -57,7 +57,7 @@ parse_pubmed <- function(fetch){
     pluck("MedlineCitation","Article","Journal","JournalIssue","Issue",1) 
 
 
-  message(glue("Found {title} by {pluck(authorlist, 1, 'LastName',1)} et al. published on {pubdate} in {journal}"))
+  message(glue("Found {title} by {pluck(authorlist, 1, 'LastName',1)} et al. published on {pubdate} in {journaltitle}"))
 
   # make bibentry
   bib = RefManageR::BibEntry("article", key = paste0(first_author, str_remove(journalabbr," "),pubyear), title = title, 
