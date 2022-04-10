@@ -6,10 +6,10 @@ on:
   schedule:
     - cron: "0 0 * 0 0"
 
-name: build-commit-bibs
+name: get-commit-bibs
 
 jobs:
-  build-commit-bibs:
+  get-commit-bibs:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
