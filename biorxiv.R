@@ -37,7 +37,7 @@ search_biorxiv <- function(term) {
   dois = read_lines(cache_file)
   
   # load last run
-  message("Detecing last run DOIs")
+  message("Detecting last run DOIs")
   date_file = here::here(".cache/last_run.txt")
   last_run = read_lines(date_file) %>% lubridate::as_date() %>% max()
   
@@ -53,8 +53,12 @@ search_biorxiv <- function(term) {
   term_fetch = try(
     rbiorxiv::biorxiv_content(from = last_run, to = lubridate::today(), limit = "*", format = "df") %>%
       filter(grepl(term, authors)) 
-    )
-  if (nrow(term_fetch) == 0) {
+  )
+
+  # if none found
+  if (is.null(nrow(term_fetch))) {
+    term_fetch = doi_fetch[0,]
+  } else if(nrow(term_fetch) == 0){
     term_fetch = doi_fetch[0,]
   }
   
