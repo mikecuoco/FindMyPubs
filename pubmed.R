@@ -81,7 +81,7 @@ search_pubmed <- function(term) {
   
   # process each fetch
   bib = map(fetch, parse_pubmed) %>% unname()
-  bib = data[!grepl("Erratum|Correction", data)] # remove erratums and corrections
+  bib = bib[!grepl("Erratum|Correction", bib)] # remove erratums and corrections
   
   RefManageR::toBiblatex(bib) %>%
     write_lines("pubs.bib")
