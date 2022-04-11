@@ -1,7 +1,7 @@
 require(rentrez)
 require(RefManageR)
-require(rentrez)
 require(tidyverse)
+require(lubridate)
 require(glue)
 require(here)
 require(xml2)
@@ -33,10 +33,11 @@ parse_pubmed <- function(fetch){
   pubmed = fetch %>% 
     pluck("PubmedData","History") %>% 
     keep(~ attr(.x,"PubStatus") == "pubmed")
-    pubyear = pubmed %>% pluck("PubMedPubDate","Year",1) 
-  pubmonth = pubmed %>% pluck("PubMedPubDate","Month",1) 
+  pubyear = pubmed %>% pluck("PubMedPubDate","Year",1) 
+  pubmonth = pubmed %>% pluck("PubMedPubDate","Month",1)
+  pubmonth = ifelse(nchar(pubmonth) > 1, pubmonth, paste0("0",pubmonth)) 
   pubday = pubmed %>% pluck("PubMedPubDate","Day",1)
-  pubdate = glue("{pubyear}-{pubmonth}") 
+  pubdate = glue("{pubyear}{pubmonth}{pubday}") %>% lubridate::as_date()
   
   # parse journal title
   title = fetch %>% 
@@ -60,10 +61,11 @@ parse_pubmed <- function(fetch){
   message(glue("Found {title} by {pluck(authorlist, 1, 'LastName',1)} et al. published on {pubdate} in {journaltitle}"))
 
   # make bibentry
-  bib = RefManageR::BibEntry("article", key = paste0(first_author, str_remove(journalabbr," "),pubyear), title = title, 
-                             journaltitle = journaltitle, shortjournal = journalabbr, langid = "english",
+  # FIXME: warning: All formats failed to parse. No formats found. 
+  bib = RefManageR::BibEntry("article", key = paste0(first_author, str_remove_all(journalabbr," "),pubyear), title = title, 
+                             journaltitle = journaltitle, shortjournal = journalabbr, langid = "english", keywords = "published",
                              year = pubyear, month = pubmonth, author = paste(authors, collapse = " and "),
-                             date = pubdate, volume = volume, issue = issue, doi = doi)
+                             date = as.character(pubdate), volume = volume, issue = issue, doi = doi)
 
   return(bib)
 }
@@ -84,6 +86,6 @@ search_pubmed <- function(term) {
   bib = bib[!grepl("Erratum|Correction", bib)] # remove erratums and corrections
   
   RefManageR::toBiblatex(bib) %>%
-    write_lines("pubs.bib")
+    write_lines("pubmed.bib")
 }
 

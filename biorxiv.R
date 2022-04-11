@@ -78,8 +78,9 @@ search_biorxiv <- function(term) {
   # make biblatex file
   bib = apply(fetch, 1, function(.x){
       bib = RefManageR::BibEntry("article", key = paste0(.x[["first_author"]], .x[["journal"]], .x[["pubyear"]]),
-                                author = str_replace_all(.x[["authors"]], "; ", " and "),
-                                title = .x[["title"]], year = .x[["pubyear"]], journaltitle = .x[["journal"]])
+                                author = str_replace_all(.x[["authors"]], "; ", " and "), keywords="preprint",
+                                title = .x[["title"]], year = .x[["pubyear"]], journaltitle = .x[["journal"]], 
+                                doi = .x[["doi"]])
       return(bib)
   })
 
