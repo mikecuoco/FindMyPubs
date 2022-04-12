@@ -1,12 +1,11 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/master/examples
 # Need help debugging build failures? Start at https://github.com/r-lib/actions#where-to-find-help
+name: get-commit-bibs
 on:
   push:
     branches: [main, master]
   schedule:
     - cron: "0 0 * * 0"
-
-name: get-commit-bibs
 
 jobs:
   get-commit-bibs:
@@ -42,3 +41,11 @@ jobs:
           git add --all || echo "No changes to add"
           git commit -m 'Fetched new publications and/or preprints' || echo "No changes to commit"
           git push origin || echo "No changes to commit"
+
+      - name: Repository Dispatch
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          repository: mikecuoco/curriculum-vitae
+          event-type: git-commit-bibs
+          client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
