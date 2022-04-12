@@ -84,7 +84,7 @@ search_biorxiv <- function(term) {
       bib = RefManageR::BibEntry("article", key = paste0(.x[["first_author"]], .x[["journal"]], .x[["pubyear"]]),
                                 author = str_replace_all(.x[["authors"]], "; ", " and "), keywords="preprint",
                                 title = .x[["title"]], year = .x[["pubyear"]], journaltitle = .x[["journal"]], 
-                                doi = .x[["doi"]])
+                                doi = .x[["doi"]], type = .x[["type"]])
       return(bib)
   })
 
