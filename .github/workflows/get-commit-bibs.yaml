@@ -13,7 +13,7 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install system dependencies
         run: |
           sudo apt-get install libcurl4-openssl-dev
@@ -42,6 +42,7 @@ jobs:
           git commit -m 'Fetched new publications and/or preprints' || echo "No changes to commit"
           git push origin || echo "No changes to commit"
 
+      # TODO only run this on a commit
       - name: Repository Dispatch
         uses: peter-evans/repository-dispatch@v2
         with:
