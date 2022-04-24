@@ -48,5 +48,5 @@ jobs:
         with:
           token: ${{ secrets.REPO_ACCESS_TOKEN }}
           repository: mikecuoco/curriculum-vitae
-          event-type: git-commit-bibs
+          event-type: get-commit-bibs
           client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}"}'
