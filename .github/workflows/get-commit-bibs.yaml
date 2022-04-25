@@ -31,7 +31,7 @@ jobs:
       - name: Get BioRxiv entries
         run: |
           source("biorxiv.R")
-          search_biorxiv("Michael Cuoco")
+          search_biorxiv("Cuoco, M.")
         shell: Rscript {0}
 
       - name: Commit results
