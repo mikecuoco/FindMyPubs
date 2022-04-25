@@ -39,7 +39,7 @@ search_biorxiv <- function(term) {
   # load last run
   message("Detecting last run DOIs")
   date_file = here::here(".cache/last_run.txt")
-  last_run = read_lines(date_file) %>% lubridate::as_date() %>% max()
+  last_run = read_lines(date_file) %>% lubridate::as_date() %>% na.omit() %>% max()
   
   # look for specified DOIs
   if (!is.null(dois)){
@@ -55,11 +55,13 @@ search_biorxiv <- function(term) {
       filter(grepl(term, authors)) 
   )
 
-  # if none found
-  if (is.null(nrow(term_fetch))) {
+  if (is.null(nrow(term_fetch))) { # if none found
     term_fetch = doi_fetch[0,]
-  } else if(nrow(term_fetch) == 0){
+  } else if(nrow(term_fetch) == 0){ # if none found
     term_fetch = doi_fetch[0,]
+  } else {     # record date
+    message("Recording run date")
+    write_lines(x = today(), file = date_file, append = T)
   }
   
   # compile doi and term fetches
@@ -74,10 +76,6 @@ search_biorxiv <- function(term) {
   # cache dois
   message("Caching DOIs")
   write_lines(x = fetch$doi, file = cache_file)
-  
-  # record date
-  message("Recording run date")
-  write_lines(x = today(), file = date_file, append = T)
   
   # make biblatex file
   bib = apply(fetch, 1, function(.x){
