@@ -75,7 +75,7 @@ parse_pubmed <- function(fetch){
 search_pubmed <- function(term) {
   
   # search with input term
-  pmids = rentrez::entrez_search("pubmed", term) %>% pluck("ids")
+  pmids = rentrez::entrez_search("pubmed", term, retmax=1000) %>% pluck("ids")
 
   # fetch results and parse xml
   fetch = rentrez::entrez_fetch("pubmed", pmids, rettype = "xml", parsed = F) %>% 
