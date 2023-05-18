@@ -22,7 +22,7 @@ jobs:
       - uses: r-lib/actions/setup-renv@v2
         with:
           cache-version: 2
-      
+
       # run my scripts
       - name: Get Pubmed entries
         run: |

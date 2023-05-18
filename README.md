@@ -11,4 +11,4 @@ R scripts to find Pubmed publications and BioRxiv preprints for a given author a
 ## TODO
 
 - [ ] Write unit tests
-- [ ] 
+- [ ]
