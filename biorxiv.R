@@ -1,6 +1,7 @@
 require(rbiorxiv)
 require(RefManageR)
 require(purrr)
+require(stringr)
 require(dplyr)
 require(lubridate)
 require(glue)
